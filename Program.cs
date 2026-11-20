@@ -1,3 +1,5 @@
+using MVC01.custome_Middlewares;
+
 namespace MVC01
 {
     public class Program
@@ -16,6 +18,24 @@ namespace MVC01
 
             var app = builder.Build();
 
+
+            #region custom middlewares 
+            //app.Use( async (contextHeader, nextMiddleware) =>
+            //{
+            //    //1_ do what this middleware is made for EX:Say hello in Console
+            //    Console.WriteLine("Hello Noor");
+
+            //    //2_ go to the next middleWare to this middlware 
+            //    await nextMiddleware(contextHeader); // هنا بنخليه يكمل للMiddleware اللي بعد الMiddleware دي ف هيطلع منه واي كود بعد الاوردر دا هيحصل وقت رجول الريكويست للMiddleware تاني 
+            //    Console.WriteLine("Bye Bye ya Noor");
+
+            //});
+
+            app.UseMiddleware<RequestTimingMiddleware>();
+            #endregion
+
+
+            #region middlewares
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -35,7 +55,8 @@ namespace MVC01
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
-            app.Run();
+            app.Run(); //last middleware and any middleware after it won't run or executed in the program 
+            #endregion
         }
     }
 }
